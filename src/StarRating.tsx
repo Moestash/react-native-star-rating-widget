@@ -116,7 +116,7 @@ type StarRatingProps = {
    *
    * @default StarIcon
    */
-  StarIconComponent?: (props: StarIconProps) => JSX.Element;
+  StarIconComponent?: (props: StarIconProps) => React.JSX.Element;
 
   testID?: string;
 
@@ -189,7 +189,7 @@ const StarRating = ({
   accessibilityAdjustmentLabel = '%value% stars',
 }: StarRatingProps) => {
   const multiplier = step === 'quarter' ? 4 : step === 'half' ? 2 : 1;
-  const width = React.useRef<number>();
+  const width = React.useRef<number>(undefined);
   const [isInteracting, setInteracting] = React.useState(false);
   const [stagedRating, setStagedRating] = React.useState(rating);
 

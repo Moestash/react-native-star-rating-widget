@@ -52,7 +52,7 @@ type Props = {
    *
    * @default StarIcon
    */
-  StarIconComponent?: (props: StarIconProps) => JSX.Element;
+  StarIconComponent?: (props: StarIconProps) => React.JSX.Element;
 
   /**
    * Step size for the rating.

@@ -1,38 +1,31 @@
 const path = require('path');
-const escape = require('escape-string-regexp');
-const { getDefaultConfig } = require('@expo/metro-config');
-const exclusionList = require('metro-config/src/defaults/exclusionList');
+const { getDefaultConfig } = require('expo/metro-config');
 const pak = require('../package.json');
 
-const root = path.resolve(__dirname, '..');
+const projectRoot = __dirname;
+const monorepoRoot = path.resolve(projectRoot, '..');
 
-const modules = Object.keys({
-  ...pak.peerDependencies,
-});
+const modules = Object.keys(pak.peerDependencies || {});
 
-const defaultConfig = getDefaultConfig(__dirname);
+const escape = (str) => str.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
 
-module.exports = {
-  ...defaultConfig,
+const config = getDefaultConfig(projectRoot);
 
-  projectRoot: __dirname,
-  watchFolders: [root],
+config.watchFolders = [monorepoRoot];
 
-  // We need to make sure that only one version is loaded for peerDependencies
-  // So we block them at the root, and alias them to the versions in example's node_modules
-  resolver: {
-    ...defaultConfig.resolver,
+config.resolver.nodeModulesPaths = [
+  path.resolve(projectRoot, 'node_modules'),
+  path.resolve(monorepoRoot, 'node_modules'),
+];
 
-    blacklistRE: exclusionList(
-      modules.map(
-        (m) =>
-          new RegExp(`^${escape(path.join(root, 'node_modules', m))}\\/.*$`)
-      )
-    ),
+config.resolver.blockList = modules.map(
+  (m) =>
+    new RegExp(`^${escape(path.join(monorepoRoot, 'node_modules', m))}\\/.*$`)
+);
 
-    extraNodeModules: modules.reduce((acc, name) => {
-      acc[name] = path.join(__dirname, 'node_modules', name);
-      return acc;
-    }, {}),
-  },
-};
+config.resolver.extraNodeModules = modules.reduce((acc, name) => {
+  acc[name] = path.join(projectRoot, 'node_modules', name);
+  return acc;
+}, {});
+
+module.exports = config;
