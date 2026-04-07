@@ -127,6 +127,20 @@ type StarRatingProps = {
   starContainerStyle?: StyleProp<ViewStyle>;
 
   /**
+   * Extra vertical hitSlop.
+   *
+   * @default 0
+   */
+  hitSlopVertical?: number;
+
+  /**
+   * Extra horizontal hitSlop.
+   *
+   * @default 0
+   */
+  hitSlopHorizontal?: number;
+
+  /**
    * Custom animation configuration.
    *
    * @default
@@ -207,6 +221,8 @@ const StarRating = ({
   multiplier: fractionMultiplier,
   snap,
   enableSwiping = true,
+  hitSlopVertical = 0,
+  hitSlopHorizontal = 0,
   onRatingStart,
   onRatingEnd,
   animationConfig = defaultAnimationConfig,
@@ -315,6 +331,12 @@ const StarRating = ({
         {...panResponder.panHandlers}
         onLayout={(e) => {
           width.current = e.nativeEvent.layout.width;
+        }}
+        hitSlop={{
+          top: hitSlopVertical,
+          bottom: hitSlopVertical,
+          left: hitSlopHorizontal,
+          right: hitSlopHorizontal,
         }}
         testID={testID}
         accessible={true}

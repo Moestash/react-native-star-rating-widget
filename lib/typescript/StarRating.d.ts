@@ -96,6 +96,18 @@ type StarRatingProps = {
      */
     starContainerStyle?: StyleProp<ViewStyle>;
     /**
+     * Extra vertical hitSlop.
+     *
+     * @default 0
+     */
+    hitSlopVertical?: number;
+    /**
+     * Extra horizontal hitSlop.
+     *
+     * @default 0
+     */
+    hitSlopHorizontal?: number;
+    /**
      * Custom animation configuration.
      *
      * @default
@@ -147,6 +159,6 @@ type StarRatingProps = {
      */
     accessibilityAdjustmentLabel?: string;
 };
-declare const StarRating: ({ rating, maxStars, starSize, strokeWidth, onChange, color, emptyColor, step, fullFraction, multiplier: fractionMultiplier, snap, enableSwiping, onRatingStart, onRatingEnd, animationConfig, style, starStyle, starContainerStyle, StarIconComponent, testID, accessibilityLabel, accessabilityIncrementLabel, accessabilityDecrementLabel, accessabilityActivateLabel, accessibilityAdjustmentLabel, }: StarRatingProps) => React.JSX.Element;
+declare const StarRating: ({ rating, maxStars, starSize, strokeWidth, onChange, color, emptyColor, step, fullFraction, multiplier: fractionMultiplier, snap, enableSwiping, hitSlopVertical, hitSlopHorizontal, onRatingStart, onRatingEnd, animationConfig, style, starStyle, starContainerStyle, StarIconComponent, testID, accessibilityLabel, accessabilityIncrementLabel, accessabilityDecrementLabel, accessabilityActivateLabel, accessibilityAdjustmentLabel, }: StarRatingProps) => React.JSX.Element;
 export default StarRating;
 //# sourceMappingURL=StarRating.d.ts.map
