@@ -6,6 +6,6 @@ export type StarIconProps = {
     fill: number;
     borderWidth?: number;
 };
-declare const StarIcon: ({ index, size, color, fill, borderWidth }: StarIconProps) => React.JSX.Element;
+declare const StarIcon: ({ index, size, color, fill, borderWidth, }: StarIconProps) => React.JSX.Element;
 export default StarIcon;
 //# sourceMappingURL=StarIcon.d.ts.map

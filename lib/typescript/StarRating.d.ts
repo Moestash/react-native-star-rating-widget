@@ -147,6 +147,6 @@ type StarRatingProps = {
      */
     accessibilityAdjustmentLabel?: string;
 };
-declare const StarRating: ({ rating, maxStars, starSize, strokeWidth, onChange, color, emptyColor, step, fullFraction, multiplier, snap, enableSwiping, onRatingStart, onRatingEnd, animationConfig, style, starStyle, starContainerStyle, StarIconComponent, testID, accessibilityLabel, accessabilityIncrementLabel, accessabilityDecrementLabel, accessabilityActivateLabel, accessibilityAdjustmentLabel, }: StarRatingProps) => React.JSX.Element;
+declare const StarRating: ({ rating, maxStars, starSize, strokeWidth, onChange, color, emptyColor, step, fullFraction, multiplier: fractionMultiplier, snap, enableSwiping, onRatingStart, onRatingEnd, animationConfig, style, starStyle, starContainerStyle, StarIconComponent, testID, accessibilityLabel, accessabilityIncrementLabel, accessabilityDecrementLabel, accessabilityActivateLabel, accessibilityAdjustmentLabel, }: StarRatingProps) => React.JSX.Element;
 export default StarRating;
 //# sourceMappingURL=StarRating.d.ts.map
