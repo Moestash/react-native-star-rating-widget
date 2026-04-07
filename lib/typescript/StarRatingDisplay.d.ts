@@ -1,0 +1,82 @@
+import React from 'react';
+import { StyleProp, ViewStyle } from 'react-native';
+import { StarIconProps } from './StarIcon';
+type Props = {
+    /**
+     * Rating Value. Should be between 0 and `maxStars`.
+     */
+    rating: number;
+    /**
+     * Custom color for the filled stars.
+     *
+     * @default '#fdd835'
+     */
+    color?: string;
+    /**
+     * Custom color for the empty stars.
+     *
+     * @default color
+     */
+    emptyColor?: string;
+    /**
+     * Total amount of stars to display.
+     *
+     * @default 5
+     */
+    maxStars?: number;
+    /**
+     * Size of the stars.
+     *
+     * @default 32
+     */
+    starSize?: number;
+    /**
+     * Width of stroke.
+     *
+     * @default 1.5
+     */
+    strokeWidth?: number;
+    /**
+     * Custom style for the component.
+     */
+    style?: StyleProp<ViewStyle>;
+    /**
+     * Custom style for the star component.
+     */
+    starStyle?: StyleProp<ViewStyle>;
+    /**
+     * Custom star icon component.
+     *
+     * @default StarIcon
+     */
+    StarIconComponent?: (props: StarIconProps) => React.JSX.Element;
+    /**
+     * Step size for the rating.
+     *
+     * @default 'half'
+     */
+    step?: 'half' | 'quarter' | 'full';
+    /**
+     * Allow unconstrained fractional values.
+     */
+    fullFraction?: boolean;
+    /**
+     * Multiplies the rating range.
+     * eg. 5 stars * multiplier 20 uses range 0–100.
+     */
+    multiplier?: number;
+    /**
+     * Snap step when using fullFraction.
+     */
+    snap?: number;
+    /**
+     * The accessibility label used on the star component.
+     *
+     * @default `star rating. ${rating} stars.`
+     */
+    accessibilityLabel?: string;
+    testID?: string;
+};
+declare const StarRatingDisplay: ({ rating, maxStars, starSize, strokeWidth, color, emptyColor, style, starStyle, StarIconComponent, testID, accessibilityLabel, }: Props) => React.JSX.Element;
+export default StarRatingDisplay;
+//# sourceMappingURL=StarRatingDisplay.d.ts.map
