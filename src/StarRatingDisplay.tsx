@@ -38,6 +38,13 @@ type Props = {
   starSize?: number;
 
   /**
+   * Width of stroke.
+   *
+   * @default 1.5
+   */
+  strokeWidth?: number;
+
+  /**
    * Custom style for the component.
    */
   style?: StyleProp<ViewStyle>;
@@ -62,6 +69,22 @@ type Props = {
   step?: 'half' | 'quarter' | 'full';
 
   /**
+   * Allow unconstrained fractional values.
+   */
+  fullFraction?: boolean;
+
+  /**
+   * Multiplies the rating range.
+   * eg. 5 stars * multiplier 20 uses range 0–100.
+   */
+  multiplier?: number;
+
+  /**
+   * Snap step when using fullFraction.
+   */
+  snap?: number;
+
+  /**
    * The accessibility label used on the star component.
    *
    * @default `star rating. ${rating} stars.`
@@ -76,9 +99,9 @@ const StarRatingDisplay = ({
   rating,
   maxStars = 5,
   starSize = 32,
+  strokeWidth = 1.5,
   color = defaultColor,
   emptyColor = color,
-  step = 'half',
   style,
   starStyle,
   StarIconComponent = StarIcon,
@@ -91,14 +114,15 @@ const StarRatingDisplay = ({
       accessibilityLabel={accessibilityLabel}
       testID={testID}
     >
-      {getStars(rating, maxStars, step).map((starType, i) => {
+      {getStars(rating, maxStars).map((fill, i) => {
         return (
           <View key={i} style={[styles.star, starStyle]}>
             <StarIconComponent
               index={i}
-              type={starType}
+              fill={fill}
               size={starSize}
-              color={starType === 'empty' ? emptyColor : color}
+              borderWidth={strokeWidth}
+              color={fill > 0 ? color : emptyColor}
             />
           </View>
         );

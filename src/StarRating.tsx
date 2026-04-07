@@ -61,11 +61,34 @@ type StarRatingProps = {
   starSize?: number;
 
   /**
+   * Width of stroke.
+   *
+   * @default 1.5
+   */
+  strokeWidth?: number;
+
+  /**
    * Step size for the rating.
    *
    * @default 'half'
    */
   step?: 'half' | 'quarter' | 'full';
+
+  /**
+   * Allow unconstrained fractional values.
+   */
+  fullFraction?: boolean;
+
+  /**
+   * Multiplies the rating range.
+   * eg. 5 stars * multiplier 20 uses range 0–100.
+   */
+  multiplier?: number;
+
+  /**
+   * Snap step when using fullFraction.
+   */
+  snap?: number;
 
   /**
    * Enable swiping to rate.
@@ -175,10 +198,14 @@ const StarRating = ({
   rating,
   maxStars = 5,
   starSize = 32,
+  strokeWidth = 1.5,
   onChange,
   color = defaultColor,
   emptyColor = color,
   step = 'half',
+  fullFraction = false,
+  multiplier,
+  snap,
   enableSwiping = true,
   onRatingStart,
   onRatingEnd,
@@ -194,7 +221,9 @@ const StarRating = ({
   accessabilityActivateLabel = 'activate (default)',
   accessibilityAdjustmentLabel = '%value% stars',
 }: StarRatingProps) => {
-  const multiplier = step === 'quarter' ? 4 : step === 'half' ? 2 : 1;
+  const stepMultiplier = step === 'quarter' ? 4 : step === 'half' ? 2 : 1;
+  if (!multiplier) multiplier = stepMultiplier;
+
   const width = React.useRef<number>(undefined);
   const [isInteracting, setInteracting] = React.useState(false);
   const [stagedRating, setStagedRating] = React.useState(rating);
@@ -207,19 +236,19 @@ const StarRating = ({
         return calculateRating(width.current - x, false);
       }
 
-      const newRating =
-        step !== 'full'
-          ? Math.max(
-              0,
-              Math.min(
-                Math.round((x / width.current) * maxStars * multiplier + 0.2) /
-                  multiplier,
-                maxStars
-              )
-            )
-          : Math.ceil((x / width.current) * maxStars);
+      let value = (x / width.current) * maxStars;
+      value = value * multiplier;
 
-      return newRating;
+      if (fullFraction) {
+        if (snap)
+          value = Math.round(value / (snap * multiplier)) * (snap * multiplier);
+      } else {
+        value = step !== 'full' ? Math.round(value + 0.2) : Math.ceil(value);
+      }
+
+      value = value / multiplier;
+
+      return Math.max(0, Math.min(value, maxStars));
     };
 
     const handleChange = (newRating: number) => {
@@ -271,6 +300,8 @@ const StarRating = ({
     animationConfig.delay,
     step,
     multiplier,
+    fullFraction,
+    snap,
   ]);
 
   return (
@@ -299,8 +330,10 @@ const StarRating = ({
           { name: 'activate', label: accessabilityActivateLabel },
         ]}
         onAccessibilityAction={(event: AccessibilityActionEvent) => {
-          const incrementor =
+          let incrementor =
             step === 'half' ? 0.5 : step === 'quarter' ? 0.25 : 1;
+          if (fullFraction) incrementor = snap ?? 1 / multiplier;
+
           switch (event.nativeEvent.actionName) {
             case 'increment':
               if (stagedRating >= maxStars) {
@@ -343,7 +376,7 @@ const StarRating = ({
           }
         }}
       >
-        {getStars(rating, maxStars, step).map((starType, i) => {
+        {getStars(rating, maxStars).map((fill, i) => {
           return (
             <AnimatedIcon
               key={i}
@@ -353,9 +386,10 @@ const StarRating = ({
             >
               <StarIconComponent
                 index={i}
-                type={starType}
+                fill={fill}
                 size={starSize}
-                color={starType === 'empty' ? emptyColor : color}
+                borderWidth={strokeWidth}
+                color={fill > 0 ? color : emptyColor}
               />
             </AnimatedIcon>
           );

@@ -1,21 +1,10 @@
-export function getStars(
-  rating: number,
-  maxStars: number,
-  step?: 'half' | 'quarter' | 'full'
-) {
+export function getStars(rating: number, maxStars: number): number[] {
   return [...Array(maxStars)].map((_, i) => {
-    const remainder = rating - i;
+    const fill = rating - i;
 
-    if (remainder >= 1) return 'full';
+    if (fill <= 0) return 0;
+    if (fill >= 1) return 1;
 
-    if (step === 'quarter') {
-      if (remainder >= 0.75) return 'three-quarter';
-      if (remainder >= 0.5) return 'half';
-      if (remainder >= 0.25) return 'quarter';
-    } else if (step === 'half') {
-      if (remainder >= 0.5) return 'half';
-    }
-
-    return 'empty';
+    return fill;
   });
 }
