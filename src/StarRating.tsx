@@ -204,7 +204,7 @@ const StarRating = ({
   emptyColor = color,
   step = 'half',
   fullFraction = false,
-  multiplier,
+  multiplier: fractionMultiplier,
   snap,
   enableSwiping = true,
   onRatingStart,
@@ -222,7 +222,8 @@ const StarRating = ({
   accessibilityAdjustmentLabel = '%value% stars',
 }: StarRatingProps) => {
   const stepMultiplier = step === 'quarter' ? 4 : step === 'half' ? 2 : 1;
-  if (!multiplier) multiplier = stepMultiplier;
+  const multiplier = fractionMultiplier ?? stepMultiplier;
+  const internalRating = rating / multiplier;
 
   const width = React.useRef<number>(undefined);
   const [isInteracting, setInteracting] = React.useState(false);
@@ -230,7 +231,7 @@ const StarRating = ({
 
   const panResponder = React.useMemo(() => {
     const calculateRating = (x: number, isRTL = I18nManager.isRTL) => {
-      if (!width.current) return rating;
+      if (!width.current) return internalRating;
 
       if (isRTL) {
         return calculateRating(width.current - x, false);
@@ -252,8 +253,10 @@ const StarRating = ({
     };
 
     const handleChange = (newRating: number) => {
-      if (newRating !== rating) {
-        onChange(newRating);
+      const scaled = newRating * multiplier;
+
+      if (scaled !== rating) {
+        onChange(scaled);
       }
     };
 
@@ -292,6 +295,7 @@ const StarRating = ({
     });
   }, [
     rating,
+    internalRating,
     maxStars,
     onChange,
     enableSwiping,
@@ -322,7 +326,7 @@ const StarRating = ({
         accessibilityValue={{
           min: 0,
           max: maxStars * multiplier,
-          now: Math.round(rating * multiplier),
+          now: Math.round(rating),
         }}
         accessibilityActions={[
           { name: 'increment', label: accessabilityIncrementLabel },
@@ -376,11 +380,11 @@ const StarRating = ({
           }
         }}
       >
-        {getStars(rating, maxStars).map((fill, i) => {
+        {getStars(internalRating, maxStars).map((fill, i) => {
           return (
             <AnimatedIcon
               key={i}
-              active={isInteracting && rating - i >= 0.5}
+              active={isInteracting && internalRating - i >= 0.5}
               animationConfig={animationConfig}
               style={starStyle}
             >
